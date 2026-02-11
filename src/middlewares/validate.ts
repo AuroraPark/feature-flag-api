@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { ZodError, ZodJSONSchema } from 'zod';
+import { ZodError, ZodType } from 'zod';
 import { sendError } from '../common/utils/apiResponse';
 
-export function validate(schema: ZodJSONSchema) {
+export function validate<T>(schema: ZodType<T>) {
     return (req: Request, res: Response, next: NextFunction): void => {
         try {
             req.body = schema.parse(req.body);

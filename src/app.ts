@@ -4,6 +4,7 @@ import cors from 'cors';
 import { requestLogger } from './middlewares/requestLogger';
 import { notFoundHandler } from './middlewares/notFoundHandler';
 import { errorHandler } from './middlewares/errorHandler';
+import authRouter from './modules/auth/auth.routes';
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.get('/healthz', (_req, res) => {
 });
 
 // --- Routes (추후 각 모듈에서 추가) ---
+app.use('/api/v1/auth', authRouter);
+
 
 // --- 404 Handler ---
 app.use(notFoundHandler);
