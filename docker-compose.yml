@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # --- MySQL ---
+  mysql:
+    image: mysql:8.0
+    container_name: ff-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: feature_flag
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --- Redis ---
+  redis:
+    image: redis:7-alpine
+    container_name: ff-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --- App (선택: 로컬에서 npm run dev 해도 됨) ---
+  # app:
+  #   build: .
+  #   container_name: ff-app
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   environment:
+  #     NODE_ENV: development
+  #     DB_HOST: mysql
+  #     DB_PORT: 3306
+  #     DB_NAME: feature_flag
+  #     DB_USER: root
+  #     DB_PASSWORD: rootpassword
+  #     REDIS_HOST: redis
+  #     REDIS_PORT: 6379
+  #     JWT_SECRET: dev-secret-key
+  #   volumes:
+  #     - ./src:/app/src
+
+volumes:
+  mysql_data:
