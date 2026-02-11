@@ -21,9 +21,11 @@ async function bootstrap(): Promise<void> {
 
     // 4. 서버 시작
     app.listen(ENV.PORT, () => {
-      console.log(`[Server] Running on http://localhost:${ENV.PORT}`);
-      console.log(`[Server] Environment: ${ENV.NODE_ENV}`);
-      console.log(`[Server] Health check: http://localhost:${ENV.PORT}/healthz`);
+      console.log(`[Server] Running on http://localhost:${ ENV.PORT }`);
+      console.log(`[Server] Environment: ${ ENV.NODE_ENV }`);
+      console.log(
+        `[Server] Health check: http://localhost:${ ENV.PORT }/healthz`
+      );
     });
   } catch (error) {
     console.error('[Server] Failed to start:', error);
