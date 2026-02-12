@@ -55,7 +55,7 @@ class AuditService {
         const { rows, count } = await auditRepository.findByFlagId(flag.id, params);
 
         return {
-            data: rows.map(toAuditResponse),
+            items: rows.map(toAuditResponse),
             pagination: {
                 page: params.page,
                 limit: params.limit,
@@ -74,7 +74,7 @@ class AuditService {
         const { rows, count } = await auditRepository.findAll(params);
 
         return {
-            data: rows.map(toAuditResponse),
+            items: rows.map(toAuditResponse),
             pagination: {
                 page: params.page,
                 limit: params.limit,

@@ -75,7 +75,7 @@ class FlagService {
         const { rows, count } = await flagRepository.findAll(params);
 
         return {
-            data: rows.map(toFlagResponse),
+            items: rows.map(toFlagResponse),
             pagination: {
                 page,
                 limit,
