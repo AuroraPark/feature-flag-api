@@ -19,3 +19,21 @@ export function validate<T>(schema: ZodType<T>) {
         }
     };
 }
+
+export function validateQuery<T>(schema: ZodType<T>) {
+    return (req: Request, _res: Response, next: NextFunction): void => {
+        try {
+            schema.parse(req.query);
+            next();
+        } catch (error) {
+            if (error instanceof ZodError) {
+                const message = error.issues
+                    .map((e) => `${ e.path.join('.') }: ${ e.message }`)
+                    .join(', ');
+                sendError(_res, 'VALIDATION_ERROR', message, 400);
+                return;
+            }
+            next(error);
+        }
+    };
+}

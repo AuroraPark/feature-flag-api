@@ -5,6 +5,10 @@ import { requestLogger } from './middlewares/requestLogger';
 import { notFoundHandler } from './middlewares/notFoundHandler';
 import { errorHandler } from './middlewares/errorHandler';
 import authRouter from './modules/auth/auth.routes';
+import { authGuard } from './middlewares/authGuard';
+import flagRouter from './modules/flag/flag.routes';
+import { swaggerSpec } from './config/swagger';
+import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 
@@ -24,8 +28,10 @@ app.get('/healthz', (_req, res) => {
 });
 
 // --- Routes (추후 각 모듈에서 추가) ---
-app.use('/api/v1/auth', authRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/flags', authGuard as express.RequestHandler, flagRouter);
 
 // --- 404 Handler ---
 app.use(notFoundHandler);

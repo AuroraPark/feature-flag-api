@@ -2,6 +2,7 @@ import app from './app';
 import sequelize from './config/database';
 import redis from './config/redis';
 import { ENV } from './config/env';
+import './database';
 
 async function bootstrap(): Promise<void> {
   try {
