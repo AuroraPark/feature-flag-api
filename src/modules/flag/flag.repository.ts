@@ -147,6 +147,19 @@ class FlagRepository {
             await FlagTarget.bulkCreate(targets);
         }
     }
+
+    /**
+     * 삭제된 플래그 포함 조회
+     *
+     * Audit 로그 조회 시 사용 — 삭제된 플래그의 감사 기록도 확인해야 하므로.
+     * paranoid: false → WHERE deleted_at IS NULL 조건을 무시
+     */
+    async findByKeyIncludeDeleted(key: string): Promise<Flag | null> {
+        return Flag.findOne({
+            where: { key },
+            paranoid: false,    // ★ soft delete된 레코드도 조회
+        });
+    }
 }
 
 export default new FlagRepository();

@@ -13,6 +13,7 @@ import evaluateRouter from './modules/evaluate/evaluate.routes';
 import { apiKeyGuard } from './middlewares/apiKeyGuard';
 import sequelize from './config/database';
 import redis from './config/redis';
+import auditRouter from './modules/audit/audit.routes';
 
 const app = express();
 
@@ -58,6 +59,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/flags', authGuard as express.RequestHandler, flagRouter);
 app.use('/api/v1/evaluate', apiKeyGuard as express.RequestHandler, evaluateRouter);
+app.use('/api/v1/audit', authGuard as express.RequestHandler, auditRouter);
 
 // --- 404 Handler ---
 app.use(notFoundHandler);
