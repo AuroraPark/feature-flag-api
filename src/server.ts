@@ -12,7 +12,7 @@ async function bootstrap(): Promise<void> {
 
     // 2. 모델 동기화 (개발용 — 프로덕션에서는 마이그레이션 사용)
     if (ENV.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: true });
+      await sequelize.sync();
       console.log('[MySQL] Models synchronized');
     }
 

@@ -1,3 +1,4 @@
+import evaluateService from '../evaluate/evaluate.service';
 import flagRepository from './flag.repository';
 import { toFlagResponse, FlagResponse } from './flag.dto';
 import { NotFoundError, ConflictError } from '../../common/errors';
@@ -37,6 +38,7 @@ class FlagService {
 
         // TODO: Audit Log 기록 (다음 단계에서 추가)
         // await auditService.log({ flagId: flag.id, action: 'CREATE', ... });
+
 
         return toFlagResponse(fullFlag!);
     }
@@ -115,6 +117,7 @@ class FlagService {
 
         // TODO: Audit Log — after 스냅샷과 함께 기록
         // await auditService.log({ flagId: existing.id, action: 'UPDATE', before, after, changedBy: userId });
+        await evaluateService.invalidateCache(key);
 
         return toFlagResponse(updated!);
     }
@@ -129,6 +132,7 @@ class FlagService {
         }
 
         // TODO: Audit Log — TOGGLE 액션 기록
+        await evaluateService.invalidateCache(key);
 
         const toggled = await flagRepository.toggle(key);
 
@@ -149,6 +153,7 @@ class FlagService {
         }
 
         // TODO: Audit Log — DELETE 액션 기록
+        await evaluateService.invalidateCache(key);
 
         await flagRepository.softDelete(key);
     }
