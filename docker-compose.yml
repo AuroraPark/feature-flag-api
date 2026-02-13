@@ -1,20 +1,21 @@
 version: '3.8'
 
 services:
-  # --- MySQL ---
-  mysql:
-    image: mysql:8.0
-    container_name: ff-mysql
+  # --- PostgreSQL ---
+  postgres:
+    image: postgres:16-alpine
+    container_name: ff-postgres
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: feature_flag
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: feature_flag
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d feature_flag"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -40,17 +41,17 @@ services:
   #   ports:
   #     - "3000:3000"
   #   depends_on:
-  #     mysql:
+  #     postgres:
   #       condition: service_healthy
   #     redis:
   #       condition: service_healthy
   #   environment:
   #     NODE_ENV: development
-  #     DB_HOST: mysql
-  #     DB_PORT: 3306
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
   #     DB_NAME: feature_flag
-  #     DB_USER: root
-  #     DB_PASSWORD: rootpassword
+  #     DB_USER: postgres
+  #     DB_PASSWORD: postgres
   #     REDIS_HOST: redis
   #     REDIS_PORT: 6379
   #     JWT_SECRET: dev-secret-key
@@ -58,4 +59,4 @@ services:
   #     - ./src:/app/src
 
 volumes:
-  mysql_data:
+  postgres_data:

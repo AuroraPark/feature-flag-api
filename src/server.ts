@@ -8,12 +8,12 @@ async function bootstrap(): Promise<void> {
   try {
     // 1. DB 연결 확인
     await sequelize.authenticate();
-    console.log('[MySQL] Connection established successfully');
+    console.log('[PostgreSQL] Connection established successfully');
 
     // 2. 모델 동기화 (개발용 — 프로덕션에서는 마이그레이션 사용)
     if (ENV.NODE_ENV === 'development') {
       await sequelize.sync();
-      console.log('[MySQL] Models synchronized');
+      console.log('[PostgreSQL] Models synchronized');
     }
 
     // 3. Redis 연결 확인 (ioredis는 생성 시 자동 연결)

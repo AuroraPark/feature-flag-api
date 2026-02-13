@@ -4,6 +4,7 @@ import { ENV } from './env';
 const redis = new Redis({
   host: ENV.REDIS_HOST,
   port: ENV.REDIS_PORT,
+  password: ENV.REDIS_PASSWORD || undefined,
   maxRetriesPerRequest: 3,
   retryStrategy(times: number) {
     const delay = Math.min(times * 200, 2000);

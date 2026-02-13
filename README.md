@@ -8,14 +8,14 @@ Feature flag management and evaluation API.
 - Flag CRUD + toggle
 - Evaluation APIs (`/evaluate`, `/evaluate/bulk`) with API key
 - Audit logs (`/audit`, `/flags/:key/audit`)
-- Redis cache + MySQL persistence
+- Redis cache + PostgreSQL persistence
 - Swagger docs (`/api-docs`)
 
 ## Stack
 
 - Node.js + TypeScript
 - Express
-- Sequelize + MySQL
+- Sequelize + PostgreSQL
 - Redis (ioredis)
 - JWT + bcrypt
 - Zod validation
@@ -48,14 +48,19 @@ Swagger:
 NODE_ENV=development
 PORT=3000
 
+# Preferred (Render/Postgres managed DB)
+DATABASE_URL=postgresql://user:password@host:5432/feature_flag
+
+# Optional fallback (if DATABASE_URL is not set)
 DB_HOST=localhost
-DB_PORT=3306
+DB_PORT=5432
 DB_NAME=feature_flag
-DB_USER=root
-DB_PASSWORD=rootpassword
+DB_USER=postgres
+DB_PASSWORD=postgres
 
 REDIS_HOST=localhost
 REDIS_PORT=6379
+REDIS_PASSWORD=
 
 JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRES_IN=86400
@@ -103,8 +108,8 @@ flowchart TD
   E --> SVC[Evaluate Service]
   F --> FSVC[Flag Service]
   SVC --> REDIS[(Redis Cache)]
-  SVC --> MYSQL[(MySQL)]
-  FSVC --> MYSQL
+  SVC --> PG[(PostgreSQL)]
+  FSVC --> PG
   FSVC --> AUD[Audit Service]
-  AUD --> MYSQL
+  AUD --> PG
 ```
